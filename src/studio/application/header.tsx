@@ -2,21 +2,16 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
-  display: flex;
-  flex: 1 1;
-  flex-direction: column;
-  justify-content: center;
-  padding: 12px 34px;
+  height: 64px;
+  padding: 12px;
 `;
 
-const Title = styled.h1`
+const Title = styled.div`
+  font-size: 2em;
   color: white;
-  margin: 0;
-  font-size: 72px;
-  padding: 6px 0;
 `;
 
-export function Hero() {
+export function Header() {
   return (
     <Container>
       <Title>Studio</Title>

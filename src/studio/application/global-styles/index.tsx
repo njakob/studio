@@ -9,8 +9,8 @@ export function GlobalStyles() {
       return null;
     }
     case 'browser-dev': {
-      const { InjectGlobalStyle } = staticRequire<typeof import('./inject-global-style')>('./inject-global-style');
-      return <InjectGlobalStyle />;
+      const { BrowserDev } = staticRequire<typeof import('./browser-dev')>('./browser-dev');
+      return <BrowserDev />;
     }
     case 'static-builder': {
       const { StaticBuilder } = staticRequire<typeof import('./static-builder')>('./static-builder');

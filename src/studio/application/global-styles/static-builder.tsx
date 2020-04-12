@@ -23,5 +23,7 @@ export function StaticBuilder() {
   // eslint-disable-next-line react/no-danger
   collector.addTag(<style dangerouslySetInnerHTML={{ __html: styles }} />);
 
+  collector.addTag(<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet" />);
+
   return null;
 }

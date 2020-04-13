@@ -18,8 +18,10 @@ export function useClipboardColor() {
           setClipboardColor(colorFromInt24(Number.parseInt(value, 16)));
         } else if (/0x[\da-f]{8}/i.test(value)) {
           setClipboardColor(colorFromInt32(Number.parseInt(value, 16)));
-        } else if (/#[\da-f]{6}/i.test(value)) {
+        } else if (/#[\da-f]{6,8}/i.test(value)) {
           setClipboardColor(colorFromHex(value));
+        } else if (/[\da-f]{6,8}/i.test(value)) {
+          setClipboardColor(colorFromHex(`#${value}`));
         } else {
           setClipboardColor(null);
         }

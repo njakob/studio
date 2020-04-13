@@ -16,6 +16,13 @@ module.exports = {
   ],
   rules: {
     'class-methods-use-this': 'off',
+    'lines-between-class-members': [
+      'error',
+      'always',
+      {
+        exceptAfterSingleLine: true,
+      },
+    ],
     'no-param-reassign': ['error', { 'props': false }],
     'no-restricted-syntax': 'off',
     'no-underscore-dangle': ['error', {

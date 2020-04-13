@@ -7,11 +7,13 @@ import { onClipboardUpdate } from './on-clipboard-update';
 const Container = styled.div`
   display: flex;
   flex-direction: row;
+  padding: 16px 0;
 `;
 
 const Formats = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 0 6px;
 `;
 
 const Format = styled.button`
@@ -26,6 +28,7 @@ const Format = styled.button`
 const Panel = styled.div`
   height: 128px;
   width: 128px;
+  border: 2px solid black;
 `;
 
 type Props = Readonly<{

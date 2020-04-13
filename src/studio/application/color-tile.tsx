@@ -1,20 +1,17 @@
 import * as React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 import type { Color } from './color';
 import { whiteColor, blackColor } from './styles';
 
 const Container = styled.button<Readonly<{ isActive: boolean }>>`
   position: relative;
-  height: 64px;
-  width: 64px;
-  border: 0;
-  outline: none;
   cursor: pointer;
-
-  ${({ isActive }) => isActive && css`
-    border: 2px solid currentColor;
-  `}
+  height: 65px;
+  width: 65px;
+  outline: none;
+  border: 2px solid black;
+  margin: -1px;
 `;
 
 const Indicator = styled.div`

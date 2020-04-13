@@ -14,6 +14,7 @@ import { useClipboardColor } from './use-clipboard-color';
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
+  padding: 1px;
 `;
 
 export function Palette() {

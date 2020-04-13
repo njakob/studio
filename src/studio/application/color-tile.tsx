@@ -28,15 +28,28 @@ const Indicator = styled.div`
   border-right-color: transparent;
 `;
 
+const ClipboardIndicator = styled.div`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border: solid 6px;
+  border-left-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: currentColor;
+  border-right-color: currentColor;
+`;
+
 type Props = Readonly<{
   color: Color;
   isActive: boolean;
+  isClipboardActive: boolean;
   onChangeColor: (color: Color) => void;
 }>;
 
 export function ColorTile({
   color,
   isActive,
+  isClipboardActive,
   onChangeColor,
 }: Props) {
   const handleClick = () => {
@@ -53,7 +66,10 @@ export function ColorTile({
       onClick={handleClick}
     >
       {isActive ? (
-        <Indicator />
+        <Indicator title="Selected color" />
+      ) : null}
+      {isClipboardActive ? (
+        <ClipboardIndicator title="Color from the clipboard" />
       ) : null}
     </Container>
 

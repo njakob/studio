@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import type { Color } from './color';
+import { onClipboardUpdate } from './on-clipboard-update';
 
 const Container = styled.div`
   display: flex;
@@ -36,6 +37,7 @@ export function ColorPanel({
 }: Props) {
   const handleCopyFormat = (text: string) => {
     navigator.clipboard.writeText(text);
+    onClipboardUpdate.trigger();
   };
 
   return (

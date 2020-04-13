@@ -9,6 +9,7 @@ import {
 import { usePersistedState } from './use-persisted-state';
 import { ColorTile } from './color-tile';
 import { ColorPanel } from './color-panel';
+import { useClipboardColor } from './use-clipboard-color';
 
 const Container = styled.div`
   display: flex;
@@ -16,6 +17,8 @@ const Container = styled.div`
 `;
 
 export function Palette() {
+  const clipboardColor = useClipboardColor();
+
   const [colors, setColors] = usePersistedState<Color[]>('colors', [(input) => {
     if (input === null) {
       return [];
@@ -43,6 +46,7 @@ export function Palette() {
             key={color.i32}
             color={color}
             isActive={activeColor ? color.i32 === activeColor.i32 : false}
+            isClipboardActive={clipboardColor ? color.i32 === clipboardColor.i32 : false}
             onChangeColor={handleChangeColor}
           />
         ))}

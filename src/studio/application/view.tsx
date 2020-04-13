@@ -1,16 +1,19 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
+import { Palette } from './palette';
+
 const Container = styled.div`
   display: flex;
   flex: 1 1;
   flex-direction: column;
-  justify-content: center;
-  padding: 12px 34px;
+  padding: 12px;
 `;
 
 export function View() {
   return (
-    <Container />
+    <Container>
+      <Palette />
+    </Container>
   );
 }

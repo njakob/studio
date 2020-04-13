@@ -41,19 +41,21 @@ const ClipboardIndicator = styled.div`
 
 type Props = Readonly<{
   color: Color;
-  isActive: boolean;
-  isClipboardActive: boolean;
-  onChangeColor: (color: Color) => void;
+  title?: string;
+  isActive?: boolean;
+  isClipboardActive?: boolean;
+  onClick: (color: Color) => void;
 }>;
 
 export function ColorTile({
   color,
-  isActive,
-  isClipboardActive,
-  onChangeColor,
+  title,
+  isActive = false,
+  isClipboardActive = false,
+  onClick,
 }: Props) {
   const handleClick = () => {
-    onChangeColor(color);
+    onClick(color);
   };
 
   const activeColor = color.brightness < 128 ? whiteColor : blackColor;
@@ -61,6 +63,7 @@ export function ColorTile({
   return (
     <Container
       tabIndex={0}
+      title={title}
       isActive={isActive}
       style={{ backgroundColor: String(color), color: String(activeColor) }}
       onClick={handleClick}

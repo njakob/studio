@@ -34,8 +34,15 @@ export function Palette() {
 
   const [activeColor, setActiveColor] = React.useState(null as N<Color>);
 
-  const handleChangeColor = (color: Color) => {
+  const handleColorTileClick = (color: Color) => {
     setActiveColor(color);
+  };
+
+  const handleAddClipboardClick = (color: Color) => {
+    setColors([
+      ...colors,
+      color,
+    ]);
   };
 
   return (
@@ -47,9 +54,16 @@ export function Palette() {
             color={color}
             isActive={activeColor ? color.i32 === activeColor.i32 : false}
             isClipboardActive={clipboardColor ? color.i32 === clipboardColor.i32 : false}
-            onChangeColor={handleChangeColor}
+            onClick={handleColorTileClick}
           />
         ))}
+        {clipboardColor && !colors.some((color) => color.i32 === clipboardColor.i32) ? (
+          <ColorTile
+            color={clipboardColor}
+            title="Add to the palette"
+            onClick={handleAddClipboardClick}
+          />
+        ) : null}
       </Container>
       <ColorPanel color={activeColor} />
     </div>

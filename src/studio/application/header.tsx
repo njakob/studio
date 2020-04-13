@@ -12,7 +12,7 @@ const Container = styled.div`
 
 const Title = styled.div`
   ${fontStyle}
-  font-size: 2em;
+  font-size: 1em;
   color: white;
 `;
 

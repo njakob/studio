@@ -1,15 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-import { isArrayOf, isNumber } from './typings';
-import {
-  Color,
-  colorFromInt32,
-} from './color';
-import { usePersistedState } from './use-persisted-state';
+import type { Color } from './color';
 import { ColorTile } from './color-tile';
 import { ColorPanel } from './color-panel';
 import { useClipboardColor } from './use-clipboard-color';
+import { useKeyUp } from './use-key-up';
+import { useColors } from './use-colors';
 
 const Container = styled.div`
   display: flex;
@@ -19,19 +16,7 @@ const Container = styled.div`
 
 export function Palette() {
   const clipboardColor = useClipboardColor();
-
-  const [colors, setColors] = usePersistedState<Color[]>('colors', [(input) => {
-    if (input === null) {
-      return [];
-    }
-    const output = JSON.parse(input) as unknown;
-    if (!isArrayOf(output, isNumber)) {
-      return [];
-    }
-    return output.map((value) => colorFromInt32(value));
-  }, (input) => (
-    JSON.stringify(input.map((color) => color.i32))
-  )]);
+  const [colors, setColors] = useColors();
 
   const [activeColor, setActiveColor] = React.useState(null as N<Color>);
 
@@ -45,6 +30,14 @@ export function Palette() {
       color,
     ]);
   };
+
+  useKeyUp('Delete', () => {
+    if (activeColor === null) {
+      return;
+    }
+    setActiveColor(null);
+    setColors(colors.filter((color) => color.i32 !== activeColor.i32));
+  }, [activeColor]);
 
   return (
     <div>

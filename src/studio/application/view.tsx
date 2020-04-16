@@ -13,7 +13,20 @@ const Container = styled.div`
 export function View() {
   return (
     <Container>
-      <Palette />
+      {(() => {
+        switch (__ENVIRONMENT__) {
+          case 'browser':
+          case 'browser-dev':
+            return (
+              <Palette />
+            );
+          case 'static-builder':
+          case 'static-builder-dev':
+            return null;
+          default:
+            return unreachable(__ENVIRONMENT__);
+        }
+      })()}
     </Container>
   );
 }

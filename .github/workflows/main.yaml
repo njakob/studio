@@ -1,0 +1,30 @@
+on: push
+name: CI
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-central-1
+    - name: Setup build environment
+      run: npm ci
+    - name: Run tests
+      run: npm test
+    - name: Build static site
+      run: npm run-script build
+    - name: Deploy static site to S3 bucket
+      run: |
+        aws s3 sync ./build s3://studio.njakob.com --metadata-directive REPLACE --exclude "*" --include "*.txt" --content-type="text/plain" --cache-control "no-cache" --delete
+        aws s3 sync ./build s3://studio.njakob.com --metadata-directive REPLACE --exclude "*" --include "*.html" --content-type="text/html" --cache-control "no-cache" --delete
+        aws s3 sync ./build s3://studio.njakob.com --metadata-directive REPLACE --exclude "*" --include "*.html.gz" --content-type="text/html" --content-encoding "gzip" --cache-control "no-cache" --delete
+        aws s3 sync ./build s3://studio.njakob.com --metadata-directive REPLACE --exclude "*" --include "*.html.br" --content-type="text/html" --content-encoding "br" --cache-control "no-cache" --delete
+        aws s3 sync ./build s3://studio.njakob.com --metadata-directive REPLACE --exclude "*" --include "*.js" --content-type="application/javascript" --cache-control "max-age=31536000" --delete
+        aws s3 sync ./build s3://studio.njakob.com --metadata-directive REPLACE --exclude "*" --include "*.js.gz" --content-type="application/javascript" --content-encoding "gzip" --cache-control "max-age=31536000" --delete
+        aws s3 sync ./build s3://studio.njakob.com --metadata-directive REPLACE --exclude "*" --include "*.js.br" --content-type="application/javascript" --content-encoding "br" --cache-control "max-age=31536000" --delete
+    - name: Invalidate Cloudfront distribution
+      run: aws cloudfront create-invalidation --distribution-id E2VLVNZLQND7WK --paths "/"

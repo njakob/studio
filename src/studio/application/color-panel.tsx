@@ -48,10 +48,16 @@ export function ColorPanel({
       <Panel style={{ backgroundColor: String(color) }} />
       <Formats>
         {color ? (
-          <Format title="Copy RGB format" onClick={() => handleCopyFormat(`0x${color.i24.toString(16)}`)}>
-            0x
-            {color.i24.toString(16)}
-          </Format>
+          <>
+            <Format title="Copy RGB format" onClick={() => handleCopyFormat(`0x${color.i24.toString(16)}`)}>
+              0x
+              {color.i24.toString(16)}
+            </Format>
+            <Format title="Copy HTML RGB format" onClick={() => handleCopyFormat(`#${color.i24.toString(16)}`)}>
+              #
+              {color.i24.toString(16)}
+            </Format>
+          </>
         ) : null}
       </Formats>
     </Container>

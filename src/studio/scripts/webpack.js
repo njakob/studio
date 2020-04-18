@@ -112,7 +112,7 @@ export default {
     new CompressionPlugin({
       filename: '[path].gz[query]',
       algorithm: 'gzip',
-      test: /\.(js|html)$/,
+      test: /\.(js|html|png\?\w+)$/,
       deleteOriginalAssets: false,
     }),
     new CompressionPlugin({

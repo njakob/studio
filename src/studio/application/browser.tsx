@@ -15,7 +15,6 @@ const target = (() => {
       return element;
     }
     case 'static-builder':
-    case 'static-builder-dev':
       throw new Error(`Unexpected environment: ${__ENVIRONMENT__}`);
     default:
       return unreachable(__ENVIRONMENT__);

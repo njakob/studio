@@ -8,7 +8,6 @@ export function Globals() {
     }
     case 'browser':
     case 'browser-dev':
-    case 'static-builder-dev':
       return null;
     default:
       return unreachable(__ENVIRONMENT__);

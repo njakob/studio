@@ -22,7 +22,6 @@ export function Static({
     }
     case 'browser-dev':
     case 'static-builder':
-    case 'static-builder-dev':
       return (
         <div>{children}</div>
       );

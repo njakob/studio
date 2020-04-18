@@ -21,7 +21,6 @@ export function View() {
               <Palette />
             );
           case 'static-builder':
-          case 'static-builder-dev':
             return null;
           default:
             return unreachable(__ENVIRONMENT__);

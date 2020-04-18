@@ -16,9 +16,6 @@ export function GlobalStyles() {
       const { StaticBuilder } = staticRequire<typeof import('./static-builder')>('./static-builder');
       return <StaticBuilder />;
     }
-    case 'static-builder-dev': {
-      return null;
-    }
     default:
       return unreachable(__ENVIRONMENT__);
   }

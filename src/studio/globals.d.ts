@@ -11,8 +11,6 @@ declare const __BUILD_INFO__: BuildInfo;
 declare type Environment =
   /** Static building process. */
   | 'static-builder'
-  /** Static building process in development mode. */
-  | 'static-builder-dev'
   /** Browser bundle. */
   | 'browser'
   /** Browser bundle in development mode. */

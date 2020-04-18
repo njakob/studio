@@ -1,6 +1,4 @@
-module.exports = function transformConditionalBuildSwitch(babel) {
-  const { types: t } = babel;
-
+module.exports = function transformConditionalBuildSwitch({ types: t }) {
   return {
     visitor: {
       SwitchStatement(path) {

@@ -1,3 +1,13 @@
+declare module '*.png?static' {
+  const dataURL: string;
+  export = dataURL;
+}
+
+declare module '*.png' {
+  const dataURL: string;
+  export = dataURL;
+}
+
 declare type N<T> = T | null;
 
 declare interface BuildInfo {

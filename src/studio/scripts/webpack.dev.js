@@ -40,13 +40,26 @@ export default {
     rules: [
       {
         test: /\.(png|jpg|jpeg|gif|woff|woff2)$/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            name: '[hash].[ext]',
-            limit: 10000,
+        oneOf: [
+          {
+            resourceQuery: /static/,
+            use: {
+              loader: 'file-loader',
+              options: {
+                name: '[name].[ext]?[hash]',
+              },
+            },
           },
-        },
+          {
+            use: {
+              loader: 'url-loader',
+              options: {
+                name: '[hash].[ext]',
+                limit: 10000,
+              },
+            },
+          },
+        ],
       },
       {
         test: /\.(ts|js)x?$/,

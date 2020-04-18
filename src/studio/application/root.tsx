@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { ThemeProvider } from 'styled-components';
 
+import { GoogleAnalytics } from './google-analytics';
 import { GlobalStyles } from './global-styles';
 import { Globals } from './globals';
 import { Header } from './header';
@@ -14,6 +15,7 @@ export function Root() {
     <ThemeProvider theme={theme}>
       <Globals />
       <GlobalStyles />
+      <GoogleAnalytics />
       <Header />
       <View />
       <Footer />

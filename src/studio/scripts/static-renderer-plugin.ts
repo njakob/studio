@@ -3,60 +3,105 @@
 import * as path from 'path';
 import * as webpack from 'webpack';
 
-const N = 'StaticRendererPlugin';
-
 export type EntrypointAssets = {
   readonly scripts: string[];
   readonly styles: string[];
 };
 
-type Options = {
-  renderContent(entrypointAssets: EntrypointAssets): Promise<string>;
-};
-
 export class StaticRendererPlugin implements webpack.Plugin {
-  options: Options;
-
-  constructor(options: Options) {
-    this.options = options;
-  }
-
   apply(compiler: webpack.Compiler) {
-    compiler.hooks.emit.tapPromise(N, async (compilation) => {
+    compiler.hooks.make.tapPromise(this.constructor.name, async (compilation) => {
       const { publicPath } = compilation.mainTemplate.outputOptions;
 
       if (!publicPath) {
         throw new Error();
       }
 
-      for (const entrypoint of compilation.entrypoints.values()) {
-        const files = entrypoint.getFiles();
-        const entrypointAssets: EntrypointAssets = {
-          scripts: [],
-          styles: [],
-        };
-        for (const file of files) {
-          const publicFilePath = path.join(publicPath, file);
-          if ((/\.js$/.test(file))) {
-            entrypointAssets.scripts.push(publicFilePath);
-          }
-          if (/\.css$/.test(file)) {
-            entrypointAssets.styles.push(publicFilePath);
-          }
-        }
+      const outputOptions = {
+        filename: `${this.constructor.name}-[name]`,
+        publicPath: compilation.outputOptions.publicPath,
+      };
 
-        // eslint-disable-next-line no-await-in-loop
-        const content = await this.options.renderContent(entrypointAssets);
+      // @ts-ignore
+      const childCompiler = compilation.createChildCompiler(this.constructor.name, outputOptions);
 
-        compilation.assets[`${entrypoint.name}.html`] = {
-          source() {
-            return content;
-          },
-          size() {
-            return content.length;
-          },
-        };
-      }
+      const renderSource = path.join(__dirname, 'render-content.tsx');
+
+      const entrypoint = 'index';
+
+      const plugins = [
+        new webpack.SingleEntryPlugin(compiler.context, renderSource, entrypoint),
+      ];
+
+      plugins.forEach((plugin) => plugin.apply(childCompiler));
+
+      childCompiler.hooks.afterPlugins.call(childCompiler);
+
+      compilation.hooks.additionalAssets.tapPromise(
+        this.constructor.name,
+        async () => {
+          childCompiler.options.module.rules[1].use.options.caller.target = 'static-builder';
+
+          const files = Array.from(compilation.entrypoints.values())[0].getFiles();
+          const entrypointAssets: EntrypointAssets = {
+            scripts: [],
+            styles: [],
+          };
+
+          for (const file of files) {
+            const publicFilePath = path.join(publicPath, file);
+            if ((/\.js$/.test(file))) {
+              entrypointAssets.scripts.push(publicFilePath);
+            }
+            if (/\.css$/.test(file)) {
+              entrypointAssets.styles.push(publicFilePath);
+            }
+          }
+
+          let source = '';
+
+          await new Promise((resolve, reject) => {
+            childCompiler.runAsChild((
+              error: unknown,
+              entries: unknown[],
+              childCompilation: webpack.compilation.Compilation,
+            ) => {
+              if (error) {
+                reject(error);
+                return;
+              }
+
+              // @ts-ignore
+              const name = compilation.mainTemplate.getAssetPath(outputOptions.filename, {
+                hash: childCompilation.hash,
+                chunk: entries[0],
+                name: entrypoint,
+              });
+
+              // Do not emit the generated script
+              delete compilation.assets[name];
+
+              source = childCompilation.assets[name].source();
+
+              resolve();
+            });
+          });
+
+          // eslint-disable-next-line no-eval
+          const { renderContent } = eval(source);
+
+          const content = await renderContent(entrypointAssets);
+
+          compilation.assets['index.html'] = {
+            source() {
+              return content;
+            },
+            size() {
+              return content.length;
+            },
+          };
+        },
+      );
     });
   }
 }

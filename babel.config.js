@@ -1,4 +1,5 @@
 const transformConditionalBuildSwitch = require('./src/studio/scripts/babel/transform-conditional-build-switch');
+const transformEnvironment = require('./src/studio/scripts/babel/transform-environment');
 const transformStaticRequire = require('./src/studio/scripts/babel/transform-static-require');
 const transformUnreachable = require('./src/studio/scripts/babel/transform-unreachable');
 
@@ -13,15 +14,11 @@ function getTarget(caller) {
     return 'node';
   }
   if (caller.name === 'babel-loader') {
-    switch (caller.target) {
-      case 'browser':
-      case 'node':
-        return caller.target;
-      default:
-        throw new Error(`Unknown target ${caller.target}`);
-    }
+    return caller.target;
   }
-  throw new Error();
+  const error = new Error('Target unavailable.');
+  error.caller = caller;
+  throw error;
 }
 
 function hashContext(flags) {
@@ -40,7 +37,7 @@ module.exports = function (api) {
 
   return {
     presets: [
-      isTarget('browser') && [
+      isTarget('browser', 'browser-dev') && [
         '@babel/preset-env',
         {
           useBuiltIns: 'usage',
@@ -50,7 +47,7 @@ module.exports = function (api) {
           },
         },
       ],
-      isTarget('node') && [
+      isTarget('node', 'static-builder') && [
         '@babel/preset-env',
         {
           useBuiltIns: 'usage',
@@ -71,6 +68,15 @@ module.exports = function (api) {
       ],
     ].filter(Boolean),
     plugins: [
+      transformUnreachable,
+      transformConditionalBuildSwitch,
+      isTarget('static-builder', 'browser', 'browser-dev') && [
+        transformEnvironment,
+        {
+          target,
+        }
+      ],
+      transformStaticRequire,
       [
         'babel-plugin-module-resolver',
         {
@@ -84,9 +90,6 @@ module.exports = function (api) {
           transform: 'constObject',
         },
       ],
-      transformStaticRequire,
-      transformUnreachable,
-      transformConditionalBuildSwitch,
       '@babel/plugin-proposal-class-properties',
       '@babel/proposal-object-rest-spread',
       [

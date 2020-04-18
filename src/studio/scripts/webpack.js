@@ -6,14 +6,12 @@ import CompressionPlugin from 'compression-webpack-plugin';
 
 import { getBuildInfo } from './get-build-info';
 import { StaticRendererPlugin } from './static-renderer-plugin';
-import { renderContent } from './render-content';
 
 const sourcesPath = path.join(process.cwd(), 'src');
 const buildPath = path.join(process.cwd(), 'build');
 
 const buildInfo = getBuildInfo();
 
-global.__ENVIRONMENT__ = 'static-builder';
 global.__BUILD_INFO__ = buildInfo;
 
 export default {
@@ -94,10 +92,9 @@ export default {
 
   plugins: [
     new CleanPlugin(),
-    new StaticRendererPlugin({ renderContent }),
+    new StaticRendererPlugin(),
     new webpack.DefinePlugin({
       __BUILD_INFO__: JSON.stringify(buildInfo),
-      __ENVIRONMENT__: JSON.stringify('browser'),
     }),
     new CompressionPlugin({
       filename: '[path].gz[query]',

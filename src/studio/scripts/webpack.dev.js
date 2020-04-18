@@ -55,7 +55,7 @@ export default {
           loader: 'babel-loader',
           options: {
             caller: {
-              target: 'browser',
+              target: 'browser-dev',
             },
           },
         },

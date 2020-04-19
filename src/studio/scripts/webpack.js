@@ -118,7 +118,7 @@ export default {
     new CompressionPlugin({
       filename: '[path].br[query]',
       algorithm: 'brotliCompress',
-      test: /\.(js|html)$/,
+      test: /\.(js|html|png\?\w+)$/,
       compressionOptions: { level: 11 },
       deleteOriginalAssets: false,
     }),

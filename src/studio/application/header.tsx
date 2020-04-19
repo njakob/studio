@@ -1,25 +1,23 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-import {
-  fontStyle,
-} from './styles';
+import logotype from './logotype.png';
 
 const Container = styled.div`
-  height: 64px;
+  height: 56px;
   padding: 12px;
 `;
 
-const Title = styled.div`
-  ${fontStyle}
-  font-size: 1em;
-  color: white;
+const Logotype = styled.img`
+  image-rendering: pixelated;
+  height: 32px;
+  width: auto;
 `;
 
 export function Header() {
   return (
     <Container>
-      <Title>Studio</Title>
+      <Logotype src={logotype} alt="Studio" />
     </Container>
   );
 }

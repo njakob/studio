@@ -19,6 +19,7 @@ export function StaticBuilder() {
     />
   ));
 
+  // Origin trial for Native File System API V2, expires Jun 1, 2020
   collector.addTag((
     <meta
       httpEquiv="origin-trial"

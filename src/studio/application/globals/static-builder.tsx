@@ -19,5 +19,12 @@ export function StaticBuilder() {
     />
   ));
 
+  collector.addTag((
+    <meta
+      httpEquiv="origin-trial"
+      content="AtpoOE0HjzRMdT2V4pTHoLLX9N1M2Btvu+W/9VkGZPT4IbxsvYALDQN6ltZ6MO4fp7ouUlgwBvquCg4+O/PI1AcAAABceyJvcmlnaW4iOiJodHRwczovL3N0dWRpby5uamFrb2IuY29tOjQ0MyIsImZlYXR1cmUiOiJOYXRpdmVGaWxlU3lzdGVtMiIsImV4cGlyeSI6MTU5MTAwODIyMn0="
+    />
+  ));
+
   return null;
 }

@@ -9,7 +9,7 @@ export function useColors() {
       return [];
     }
     const output = JSON.parse(input) as unknown;
-    if (!isArrayOf(output, isNumber)) {
+    if (!isArrayOf(isNumber)(output)) {
       return [];
     }
     return output.map((value) => colorFromInt32(value));

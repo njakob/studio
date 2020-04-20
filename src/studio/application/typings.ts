@@ -10,6 +10,26 @@ export function isFunction<T extends Function>(value: unknown): value is T {
   return typeof value === 'function';
 }
 
-export function isArrayOf<T>(input: unknown, predicate: (input: T) => input is T): input is T[] {
-  return Array.isArray(input) && input.every((value) => predicate(value));
+type Is<T> = (value: unknown) => value is T;
+
+export function isArrayOf<T>(isType: Is<T>) {
+  return (input: unknown): input is T[] => {
+    if (!Array.isArray(input)) {
+      return false;
+    }
+    if (!input.every(isType)) {
+      return false;
+    }
+    return true;
+  };
+}
+
+export function isRecordOf<T>(input: unknown, isType: Is<T>): input is Record<string, T> {
+  if (typeof input !== 'object') {
+    return false;
+  }
+  if (input === null) {
+    return false;
+  }
+  return Object.values(input).every(isType);
 }

@@ -9,6 +9,7 @@ declare module '*.png' {
 }
 
 declare type N<T> = T | null;
+declare type M<T> = T | undefined;
 
 declare interface BuildInfo {
   commitHash: string;
